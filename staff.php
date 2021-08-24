@@ -88,7 +88,7 @@ if(isset($_POST['show'])){
         </div>
     </header>
     <p style="position:center;">
-        <h1 align="center" style="color:green;">Welcome Nyatapola Bank <?php echo $_SESSION['name'] ?> !!!</h1>
+        <h1 align="center" style="color:green;">Welcome to Nyatapola Bank <?php echo $_SESSION['name'] ?> !!!</h1>
     </p>  
 
     <div class="container">

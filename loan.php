@@ -1,27 +1,31 @@
 <?php
 session_start();
-require_once "pdo.php";
+require_once 'pdo.php';
 
-if(isset($_POST['show'])){
-    header('Location:customer_detail.php');
-    return;
-}elseif(isset($_POST['withdraw'])){
-    header('Location:customer_withdraw.php');
-    return;
-}elseif(isset($_POST['logout'])){
-    header('Location:logout.php');
-    return;
-}elseif(isset($_POST['loan'])){
-    header('Location:loan.php');
+if(isset($_POST['amount']) && isset($_POST['period']) && isset($_POST['password'])){
+    if($_POST['password']==$_SESSION['password']){
+        $P=intval($_POST['amount']);
+        $i=0.2;
+        $n=intval($_POST['period']);
+        $A=($P*$i*pow((1+$i),$n))/(pow((1+$i),$n)-1);
+        $sql='insert into loan(customer_id,loan_amount,interest_rate,monthly_installment,remaining_loan) values(:customer_id,:loan_amount,:interest_rate,:monthly_installment,:remaining_loan)';
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute(array(
+            ':customer_id'=>$_SESSION['id'],
+            ':loan_amount'=>$_POST['amount'],
+            ':interest_rate'=>'20%',
+            ':monthly_installment'=>$A,
+            ':remaining_loan'=>$_POST['amount']
+        ));
+        header('Location:customer.php');
+        return;
+    }
+    
+
 }
 
+
 ?>
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +44,7 @@ if(isset($_POST['show'])){
   <link rel="stylesheet" type="text/css" href="css/styles.css">
   <!-- endbuild -->
 
-    <title><?php echo $_SESSION['name'] ?></title>
+    <title>Create New Account</title>
 </head>
 
 <body>
@@ -95,27 +99,71 @@ if(isset($_POST['show'])){
             </div>
         </div>
     </header>
-    <p style="position:center;">
-        <h1 align="center" style="color:green;">Welcome to Nyatapola Bank <?php echo $_SESSION['name'] ?> !!!</h1>
-    </p>  
+     
 
     <div class="container">
         <div class="row row-content">
-           <div class="col">
-                <form action="" method="post">
-                    <p><input type="submit" class="btn btn-primary" value="Show account details" name="show"></p>
-                    <p><input type="submit" class="btn btn-secondary" class="btn btn-secondary" value="withdraw money" name="withdraw"></p>
-                    <p><input type="submit" class="btn btn-warning" class="btn btn-secondary" value="Take a loan" name="loan"></p>
-                    <p><input type="submit" class="btn btn-danger" value="Logout" name="logout"></p>
-                </form>
+            <div class="col">
+                <h2>Take a loan from Nyatapola Bank</h2>
+                <section class="h-100 bg-dark">
+                    <div class="container py-5 h-100">
+                        <div class="row d-flex justify-content-center align-items-center h-100">
+                            <div class="col">
+                                <div class="card card-registration my-4">
+                                    <div class="row g-0">
+                                        <div class="col-xl-6 d-none d-xl-block">
+                                            <img
+                                                src="https://mdbootstrap.com/img/Photos/new-templates/bootstrap-registration/img4.jpg"
+                                                alt="Sample photo"
+                                                class="img-fluid"
+                                                style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;"
+                                            />
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="card-body p-md-5 text-black">
+                                                <h3 class="mb-5 text-uppercase">Loan Processing Form</h3>
+                                                <form action="" method="post">
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-4">
+                                                            <div class="form-outline">
+                                                            <input type="text" id="form3Example1m" name="amount" class="form-control form-control-lg" />
+                                                            <label class="form-label" for="form3Example1m">Loan Amount</label>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="form-outline mb-4">
+                                                        <input type="text"name="period" id="form3Example8" class="form-control form-control-lg" />
+                                                        <label class="form-label" for="form3Example8">Payback Period(In Years)</label>
+                                                    </div>
+                                                    
+                                                    <div class="form-outline mb-4">
+                                                        <input type="password" name="password" id="form3Example97" class="form-control form-control-lg" />
+                                                        <label class="form-label" for="form3Example97">Password</label>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end pt-3">
+                                                        <input type="submit" value="Submit" class="btn btn-warning btn-lg ms-2">
+                                                    </div>
+                                                    
+                                                    
+                                                
+                                                </form>
+
+            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
 
             </div>
-       </div>
-
-
-
+        </div>
     </div>
-
+                
 
     <footer class="footer ">
         <div class="container ">
@@ -179,4 +227,3 @@ if(isset($_POST['show'])){
 </body>
 
 </html>
-

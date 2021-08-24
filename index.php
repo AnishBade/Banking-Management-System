@@ -142,9 +142,9 @@ if(isset($_GET['customer']) || isset($_GET['staff']) || isset($_GET['manager']))
                     </div>
                     <div class="col-12 col-sm-3 align-self-center">
                         <h2>Propreiters:</h2>
-                        <p>Anish Bade, 075bei008</p>
-                        <p>Ashish Khatakho, 075bei009</p>
-                        <p>Pradeep Kumar Khanal, 075bei002</p>
+                        <p><b>Anish Bade, 075bei008</b></p>
+                        <p><b>Ashish Khatakho, 075bei009</b></p>
+                        <p><b>Pradeep Kumar Khanal, 075bei002</b></p>
                     </div>
     
                     <!-- <div class="col-12 col-sm align-self-center">

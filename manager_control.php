@@ -1,28 +1,26 @@
 <?php
 session_start();
-require_once "pdo.php";
+require_once 'pdo.php';
 
-if(isset($_POST['show'])){
-    header('Location:customer_detail.php');
-    return;
-}elseif(isset($_POST['withdraw'])){
-    header('Location:customer_withdraw.php');
-    return;
-}elseif(isset($_POST['logout'])){
+if ( isset($_SESSION['success']) ) {
+    echo '<p style="color:green">'.$_SESSION['success']."</p>\n";
+    unset($_SESSION['success']);
+}
+
+if ( isset($_SESSION['error']) ) {
+    echo '<p style="color:red">'.$_SESSION['error']."</p>\n";
+    unset($_SESSION['error']);
+}
+
+if(isset($_POST['logout'])){
     header('Location:logout.php');
     return;
-}elseif(isset($_POST['loan'])){
-    header('Location:loan.php');
+}elseif(isset($_POST['home'])){
+    header('Location:manager.php');
+    return;
 }
 
 ?>
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -95,19 +93,99 @@ if(isset($_POST['show'])){
             </div>
         </div>
     </header>
-    <p style="position:center;">
-        <h1 align="center" style="color:green;">Welcome to Nyatapola Bank <?php echo $_SESSION['name'] ?> !!!</h1>
-    </p>  
+     
 
     <div class="container">
         <div class="row row-content">
            <div class="col">
-                <form action="" method="post">
-                    <p><input type="submit" class="btn btn-primary" value="Show account details" name="show"></p>
-                    <p><input type="submit" class="btn btn-secondary" class="btn btn-secondary" value="withdraw money" name="withdraw"></p>
-                    <p><input type="submit" class="btn btn-warning" class="btn btn-secondary" value="Take a loan" name="loan"></p>
-                    <p><input type="submit" class="btn btn-danger" value="Logout" name="logout"></p>
-                </form>
+                <h1><?php echo $_SESSION['name']; ?></h1> 
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">customer_id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">branch_id</th>
+                            <th scope="col">account_balance</th>
+                            <th scope="col">action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $sql='select customer_id,customer_name,customer_address,branch_id,account_balance from customer where branch_id=:branch_id ';
+                            $stmt=$pdo->prepare($sql);
+                            $stmt->execute(array(
+                                ':branch_id'=>$_SESSION['branch_id']
+                            ));
+                            while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
+                                echo "<tr><td>";
+                                echo($row['customer_id']);
+                                echo "</td><td>";
+                                echo($row['customer_name']);
+                                echo "</td><td>";
+                                echo($row['customer_address']);
+                                echo "</td><td>";
+                                echo($row['branch_id']);
+                                echo "</td><td>";
+                                echo($row['account_balance']);
+                                echo "</td><td>";
+                                ?>
+                                <a href="manager_customer_edit.php?customer_id=<?php echo $row['customer_id']; ?>">Edit</a> / <a href="manager_customer_delete.php?customer_id=<?php echo $row['customer_id']; ?>">Delete</a></td>
+                                <?php
+                            }
+                    
+                        ?>
+                    </tbody>
+                </table>
+                <br><br><br><br><br>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">staff_id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">branch_id</th>
+                            <th scope="col">Password</th>
+                            <th scope="col">action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $sql='select staff_id,staff_name,staff_address,branch_id,staff_password from staff where branch_id=:branch_id ';
+                            $stmt=$pdo->prepare($sql);
+                            $stmt->execute(array(
+                                ':branch_id'=>$_SESSION['branch_id']
+                            ));
+                            while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
+                                echo "<tr><td>";
+                                echo($row['staff_id']);
+                                echo "</td><td>";
+                                echo($row['staff_name']);
+                                echo "</td><td>";
+                                echo($row['staff_address']);
+                                echo "</td><td>";
+                                echo($row['branch_id']);
+                                echo "</td><td>";
+                                echo($row['staff_password']);
+                                echo "</td><td>";
+                                ?>
+                                <a href="manager_staff_edit.php?staff_id=<?php echo $row['staff_id']; ?>">Edit</a> / <a href="manager_staff_delete.php?staff_id=<?php echo $row['staff_id']; ?>">Delete</a></td>
+                                <?php
+                            }
+                    
+                        ?>
+                    </tbody>
+                </table>
+                <br><br><br><br><br>
+
+                <p>
+                    <form action="" method="post">
+                         <input type="submit" class="btn btn-secondary" value="Back" name="back">
+                        <!-- <button type="button" name="logout" <button type="button" class="btn btn-danger">Danger</button>>Logout</button> -->
+                        <input type="submit" class="btn btn-danger" value="Logout" name="logout">
+                    </form>
+                    
+                </p>
 
             </div>
        </div>
@@ -179,4 +257,3 @@ if(isset($_POST['show'])){
 </body>
 
 </html>
-
