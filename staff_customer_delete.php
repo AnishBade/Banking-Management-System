@@ -38,7 +38,10 @@ catch(PDOException $e)
 }
 
 */
-
+if(isset($_REQUEST['cancel'])){
+    header('Location:staff_customer.php');
+    reuturn;
+}
 if (isset($_REQUEST['customer_id']))
 
 {
@@ -113,39 +116,35 @@ if (isset($_REQUEST['customer_id']))
 <html>
 
     <head>
+        <!-- build:css css/main.css -->
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="node_modules/bootstrap-social/bootstrap-social.css">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+  <!-- endbuild -->
 
         <title>Anish Bade</title>
     </head>
 
     <body>
 
-    
+
+
+    <div class="container">
+                    Confirm: Deleting <?php echo htmlentities($customer['customer_id']); ?>
+
+        <div class="row row-content">
+            <div class="col">
+                 <form method="post" class="form-horizontal">
+                    <input type="submit" class="btn btn-danger btn-lg ms-2"  name="delete" value="Delete">
+                    <input type="submit" class="btn btn-primary btn-lg ms-2"  name="cancel" value="Cancel">
+                </form>
+            </div>
+       </div>
 
 
 
-            <p>
-
-                Confirm: Deleting <?php echo htmlentities($customer['customer_id']); ?>
-
-            </p>
-
-
-
-            <form method="post" class="form-horizontal">
-
-
-                    
-
-                        <input class="btn btn-primary" type="submit" name="delete" value="Delete">
-
-                        <a class="btn btn-default" href="staff_customer.php">Cancel</a>
-
-                
-
-
-            </form>
-
-
+    </div>
 
 
     </body>
